@@ -1,0 +1,693 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #050706;
+  --color-ink: #eef6f0;
+  --color-mint: #d6f7e0;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --bg: #050706;
+  --ink: #eef6f0;
+  --muted: #7f8f86;
+  --dim: #55635b;
+  --mint: #d6f7e0;
+  --mint-bright: #9dffbe;
+  --line: rgba(220, 255, 229, 0.14);
+  --line-soft: rgba(220, 255, 229, 0.07);
+  --panel: rgba(233, 255, 240, 0.028);
+  --panel-lift: rgba(233, 255, 240, 0.05);
+  --shell: 1200px;
+  --gutter: clamp(20px, 4vw, 40px);
+  --nav-h: 62px;
+  --radius: 20px;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    background: var(--bg);
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-h) + 48px);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    /* Two soft lights on an almost-black ground: one mint from the top right,
+       one colourless from the left, so the page never reads as flat black. */
+    background:
+      radial-gradient(900px 620px at 79% 6%, rgba(130, 255, 163, 0.09), transparent 58%),
+      radial-gradient(760px 560px at 6% 44%, rgba(255, 255, 255, 0.035), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  figure {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--mint);
+    color: #06110b;
+  }
+}
+
+@layer components {
+  /* ---------- shell ---------- */
+  .shell {
+    width: 100%;
+    max-width: var(--shell);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .section {
+    padding-block: clamp(80px, 10vw, 150px);
+  }
+
+  /* ---------- type ---------- */
+  .display {
+    font-weight: 860;
+    letter-spacing: -0.055em;
+    line-height: 0.95;
+    font-size: clamp(2.4rem, 5.4vw, 4.25rem);
+  }
+
+  .display-hero {
+    font-weight: 860;
+    letter-spacing: -0.075em;
+    line-height: 0.82;
+    font-size: clamp(3.6rem, 11vw, 8.9rem);
+  }
+
+  .kicker {
+    font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .kicker-mint {
+    font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mint-bright);
+  }
+
+  .lede {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 48ch;
+  }
+
+  .mono {
+    font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+  }
+
+  /* ---------- buttons ---------- */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding-inline: 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 620;
+    letter-spacing: -0.01em;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    background: rgba(233, 255, 240, 0.04);
+    transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
+  }
+
+  .pill:hover {
+    background: rgba(233, 255, 240, 0.1);
+    border-color: rgba(220, 255, 229, 0.3);
+  }
+
+  .pill-solid {
+    background: var(--mint);
+    border-color: var(--mint);
+    color: #06110b;
+    box-shadow: 0 0 30px rgba(157, 255, 190, 0.22);
+  }
+
+  .pill-solid:hover {
+    background: #eafff0;
+    border-color: #eafff0;
+    box-shadow: 0 0 38px rgba(157, 255, 190, 0.34);
+  }
+
+  /* ---------- nav ---------- */
+  .nav-wrap {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 90;
+    padding: 14px var(--gutter) 0;
+    pointer-events: none;
+  }
+
+  .nav {
+    pointer-events: auto;
+    max-width: var(--shell);
+    margin-inline: auto;
+    height: var(--nav-h);
+    padding: 9px 10px 9px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(7, 10, 8, 0.72);
+    backdrop-filter: blur(18px);
+    transition: background 260ms ease, border-color 260ms ease;
+  }
+
+  .nav[data-scrolled="true"] {
+    background: rgba(7, 10, 8, 0.9);
+    border-color: rgba(220, 255, 229, 0.22);
+  }
+
+  .nav-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .nav-mark {
+    width: 30px;
+    height: auto;
+  }
+
+  .nav-brand span {
+    color: var(--dim);
+    font-weight: 500;
+  }
+
+  .nav-links {
+    display: none;
+    align-items: center;
+    gap: 26px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .nav-links a {
+    transition: color 160ms ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--ink);
+  }
+
+  @media (min-width: 780px) {
+    .nav-links {
+      display: flex;
+    }
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    min-height: min(100dvh, 900px);
+    display: flex;
+    align-items: center;
+    padding-top: calc(var(--nav-h) + 60px);
+    padding-bottom: 70px;
+  }
+
+  .hero-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(48px, 6vw, 40px);
+    align-items: center;
+  }
+
+  @media (min-width: 940px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.16fr) minmax(0, 0.84fr);
+    }
+  }
+
+  .hero-ticker {
+    display: block;
+    margin-top: 6px;
+    font-size: clamp(1.4rem, 3.2vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: var(--mint-bright);
+  }
+
+  .hero-line {
+    margin-top: 26px;
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    font-weight: 620;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  .ca-card {
+    margin-top: 26px;
+    max-width: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 12px 12px 12px 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--panel);
+  }
+
+  .ca-value {
+    font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    word-break: break-all;
+    margin-top: 3px;
+  }
+
+  .copy-btn {
+    flex-shrink: 0;
+    height: 34px;
+    padding-inline: 14px;
+    border-radius: 999px;
+    background: var(--mint);
+    color: #06110b;
+    font-size: 11px;
+    font-weight: 760;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background 180ms ease;
+  }
+
+  .copy-btn:hover {
+    background: #eafff0;
+  }
+
+  /* ---------- hero object ---------- */
+  .object-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: min(56vh, 460px);
+  }
+
+  .object {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(86vw, 430px);
+    /* Matches the trimmed artwork, so the box hugs the mark instead of leaving
+       dead space the meter and chip have to dodge. */
+    aspect-ratio: 946 / 763;
+    animation: hover 11s ease-in-out infinite;
+  }
+
+  /* The glow behind the mark. Kept in CSS rather than in the artwork so it
+     stays the same mint the rest of the page is lit with. */
+  .object-halo {
+    position: absolute;
+    inset: -8%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(157, 255, 190, 0.24) 0%,
+      rgba(157, 255, 190, 0.1) 46%,
+      rgba(157, 255, 190, 0) 72%
+    );
+    filter: blur(18px);
+  }
+
+  .object img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 22px 30px rgba(11, 58, 34, 0.55));
+  }
+
+  .chip {
+    position: absolute;
+    right: 0;
+    top: 8%;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 3px 14px;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(7, 10, 8, 0.72);
+    backdrop-filter: blur(10px);
+    font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .chip b {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .meter {
+    position: absolute;
+    right: 4%;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 44px;
+  }
+
+  .meter i {
+    display: block;
+    width: 5px;
+    border-radius: 2px;
+    background: var(--mint-bright);
+    opacity: 0.85;
+    animation: bounce 1.6s ease-in-out infinite;
+  }
+
+  /* ---------- cards ---------- */
+  .card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    padding: clamp(22px, 2.6vw, 34px);
+    transition: border-color 260ms ease, background 260ms ease, transform 260ms ease;
+  }
+
+  .card-lit {
+    background:
+      radial-gradient(420px 260px at 88% 6%, rgba(130, 255, 163, 0.09), transparent 62%),
+      var(--panel);
+  }
+
+  .head-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-items: end;
+  }
+
+  @media (min-width: 900px) {
+    .head-split {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr);
+      gap: 40px;
+    }
+  }
+
+  .duo {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: clamp(34px, 4vw, 54px);
+  }
+
+  @media (min-width: 900px) {
+    .duo {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    }
+  }
+
+  .story {
+    font-size: clamp(1.25rem, 2.1vw, 1.65rem);
+    font-weight: 620;
+    letter-spacing: -0.032em;
+    line-height: 1.32;
+  }
+
+  .story .fade {
+    color: var(--dim);
+  }
+
+  /* ---------- scan card ---------- */
+  .dial {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding-block: 26px 30px;
+  }
+
+  .dial-value {
+    position: absolute;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .spec {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 11px;
+    border-top: 1px solid var(--line-soft);
+    font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .spec b {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* ---------- roadmap ---------- */
+  .phases {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: clamp(34px, 4vw, 54px);
+  }
+
+  @media (min-width: 640px) {
+    .phases {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .phases {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .phase {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 230px;
+  }
+
+  .phase:hover {
+    border-color: rgba(220, 255, 229, 0.28);
+    transform: translateY(-3px);
+  }
+
+  .phase h3 {
+    font-size: 21px;
+    font-weight: 760;
+    letter-spacing: -0.035em;
+  }
+
+  .phase p {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .phase-state {
+    margin-top: auto;
+    font-family: ui-monospace, "SF Mono", "Menlo", monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mint-bright);
+  }
+
+  /* ---------- entry cards ---------- */
+  .entries {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: clamp(30px, 3.5vw, 44px);
+  }
+
+  @media (min-width: 640px) {
+    .entries {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .entries {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .entry {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 44px;
+    min-height: 168px;
+  }
+
+  .entry:hover {
+    border-color: rgba(220, 255, 229, 0.3);
+    background: var(--panel-lift);
+    transform: translateY(-3px);
+  }
+
+  .entry h3 {
+    font-size: clamp(1.35rem, 2vw, 1.6rem);
+    font-weight: 780;
+    letter-spacing: -0.04em;
+  }
+
+  .entry p {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .entry-mark {
+    color: var(--mint-bright);
+  }
+
+  /* ---------- footer ---------- */
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 30px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 13px;
+    color: var(--dim);
+  }
+
+  .foot b {
+    color: var(--muted);
+    font-weight: 700;
+  }
+
+  /* ---------- reveal ---------- */
+  /* The reveal wrapper sits between the grid and the card, so it has to carry
+     the stretch through or the cards in a row end up different heights. */
+  .duo > .reveal,
+  .phases > .reveal,
+  .entries > .reveal {
+    height: 100%;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 800ms cubic-bezier(0.2, 0.7, 0.3, 1),
+      transform 800ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+
+  .reveal[data-shown="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hover {
+  0%,
+  100% {
+    transform: translateY(-2%) rotate(-1.4deg);
+  }
+  50% {
+    transform: translateY(2%) rotate(1.4deg);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    height: 22%;
+  }
+  50% {
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .object,
+  .meter i {
+    animation: none;
+  }
+
+  .meter i {
+    height: 60%;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
